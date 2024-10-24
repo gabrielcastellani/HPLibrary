@@ -1,0 +1,36 @@
+﻿@using HPLibrary.Core.Contracts;
+@using HPLibrary.Core.Services;
+
+@page "/books"
+@inject IPotterService PotterService
+
+<PageTitle>Books</PageTitle>
+
+@if(_books is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenDataGrid Data="@_books" AllowPaging="true" AllowSorting="true">
+        <Columns>
+            <RadzenDataGridColumn Property="Number" Title="Number" />
+            <RadzenDataGridColumn Property="Title" Title="Title" />
+            <RadzenDataGridColumn Property="ReleaseDate" Title="Release Date" />
+            <RadzenDataGridColumn Property="Description" Title="Description" />
+            <RadzenDataGridColumn Property="Pages" Title="Pages" />
+        </Columns>
+    </RadzenDataGrid>
+}
+
+@code {
+    private Book[]? _books;
+
+    protected override Task OnInitializedAsync()
+    {
+        var result = PotterService.GetBooks();
+        _books = result.Value;
+
+        return Task.CompletedTask;
+    }
+}
